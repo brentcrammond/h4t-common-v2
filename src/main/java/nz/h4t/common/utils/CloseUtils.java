@@ -1,11 +1,13 @@
 package nz.h4t.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 
-@Slf4j
 public class CloseUtils {
+    private static final Logger log = LoggerFactory.getLogger(CloseUtils.class);
+
     public static void close(Closeable closeable) {
         try {
             if (closeable != null) {

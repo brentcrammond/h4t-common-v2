@@ -5,15 +5,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 /**
  * The JsonUtils class provides utility methods for converting JSON to objects and objects to JSON using the Jackson ObjectMapper.
  */
-@Slf4j
 public class JsonUtils {
+    private static final Logger log = LoggerFactory.getLogger(JsonUtils.class);
     private static final ObjectMapper objectMapper;
 
     static {

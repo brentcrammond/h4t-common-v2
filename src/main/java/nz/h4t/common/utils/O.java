@@ -1,11 +1,10 @@
 package nz.h4t.common.utils;
-
+ 
 /**
  * This class was forked from a version developed by Anameg Consulting.
  * Copyright Anameg Consulting 2006-2019, All Rights Reserved
  */
 public class O {
-
     public static <T> T coalesce(T... items) {
         for (var i : items) {
             if (i != null) {

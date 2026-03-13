@@ -1,17 +1,18 @@
 package nz.h4t.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.stream.Collectors;
 
-@Slf4j
 public class Timing implements AutoCloseable {
+    private static final Logger log = LoggerFactory.getLogger(Timing.class);
     public final static long MILLI = 1_000_000;
     public final static long SECOND = 1_000 * MILLI;
 
     private String location = "NA";
-    private long tm;
+    private final long tm;
 
     public Timing() {
         var stack = StackWalker.getInstance().walk(s -> s.limit(2).collect(Collectors.toList()));

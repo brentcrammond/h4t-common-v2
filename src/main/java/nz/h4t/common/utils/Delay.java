@@ -1,11 +1,13 @@
 package nz.h4t.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-@Slf4j
 public class Delay {
+    private static final Logger log = LoggerFactory.getLogger(Delay.class);
+
     public static void sleep(long ms) {
         try {
             Thread.sleep(ms);
