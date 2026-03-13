@@ -6,7 +6,7 @@
 
     <groupId>com.github.brentcrammond</groupId>
     <artifactId>common-v2</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>h4t-common-v2</name>
