@@ -1,4 +1,4 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util.geo;
 
 /**
  * The GeoUtils class provides utility methods for
@@ -14,6 +14,16 @@ package nz.h4t.common.utils;
  * measurement if necessary.
  */
 public class GeoUtils {
+    /**
+     * Calculates the great-circle distance between two points on the Earth's surface
+     * specified by their latitude and longitude using the Haversine formula.
+     *
+     * @param lat1 the latitude of the first point in decimal degrees
+     * @param lon1 the longitude of the first point in decimal degrees
+     * @param lat2 the latitude of the second point in decimal degrees
+     * @param lon2 the longitude of the second point in decimal degrees
+     * @return the distance between the two points in kilometers
+     */
     public static double distance(double lat1, double lon1, double lat2, double lon2) {
         // distance between latitudes and longitudes
         double dLat = Math.toRadians(lat2 - lat1);

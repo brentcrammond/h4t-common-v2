@@ -1,10 +1,15 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util.datetime;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Provides utility methods for parsing date strings into {@link LocalDate} objects.
+ * This class attempts to parse input strings using various date patterns that support
+ * different date formats.
+ */
 public class LocalDateUtils {
     public static LocalDate parseDates(String sdt) {
         if (StringUtils.isBlank(sdt)) {

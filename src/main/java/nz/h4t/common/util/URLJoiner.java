@@ -1,5 +1,10 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util;
 
+/**
+ * The URLJoiner class provides utility methods to combine multiple URL segments
+ * into a single, properly formatted URL string. It ensures that each segment is
+ * joined by a single forward slash ('/'), handling any redundant slashes or empty segments.
+ */
 public class URLJoiner {
     /**
      * This methods will join chunks of URL together with a single '/' between each bit.

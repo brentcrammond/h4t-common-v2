@@ -1,4 +1,4 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util;
 
 import java.text.Normalizer;
 import java.util.regex.Pattern;

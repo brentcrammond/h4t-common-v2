@@ -1,4 +1,4 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util.files;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

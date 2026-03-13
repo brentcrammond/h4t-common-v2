@@ -1,4 +1,6 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util.info;
+
+import nz.h4t.common.util.O;
 
 /**
  * This class was forked from a version developed by Anameg Consulting.

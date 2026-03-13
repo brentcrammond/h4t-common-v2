@@ -1,4 +1,4 @@
-package nz.h4t.common.utils;
+package nz.h4t.common.util.datetime;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.stream.Stream;
  * The TimeGenerator class provides static methods to generate a list or a stream of LocalTime objects
  * within a specified range and interval length.
  */
-public class TimeGenerator {
+public class LocalTimeGenerator {
     /**
      * Creates a list of LocalTime objects within the specified time range and interval length.
      *
