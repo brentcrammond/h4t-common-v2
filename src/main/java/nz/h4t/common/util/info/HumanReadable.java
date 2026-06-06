@@ -8,6 +8,8 @@ import java.text.StringCharacterIterator;
  * sizes, memory usage, or any data measured in bytes into a more comprehensible format.
  */
 public interface HumanReadable {
+    long SECOND = 1_000;
+
     /**
      * Converts a byte count into a human-readable string representation using
      * binary prefixes (e.g., KB, MB, GB, etc.).
@@ -30,5 +32,31 @@ public interface HumanReadable {
         }
         value *= Long.signum(bytes);
         return String.format("%.1f%cB", value / 1024.0, ci.current());
+    }
+
+    /**
+     * Converts a time duration in milliseconds to a human-readable string format.
+     * The format includes seconds (if applicable) and milliseconds, separated by spaces.
+     *
+     * @param ms the time duration in milliseconds to be converted
+     * @return a human-readable string representation of the given time duration,
+     * including seconds and/or milliseconds
+     */
+    default String humanReadableTimeMS(long ms) {
+        var sb = new StringBuilder();
+        long op, rem;
+        rem = ms;
+
+        op = rem / SECOND;
+        rem = rem % SECOND;
+        if (op > 0) {
+            sb.append(String.format("%,ds ", op));
+        }
+
+        if (rem > 0) {
+            sb.append(String.format("%,dms", rem));
+        }
+
+        return sb.toString().trim();
     }
 }

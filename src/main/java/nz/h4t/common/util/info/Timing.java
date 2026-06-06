@@ -26,10 +26,16 @@ public class Timing implements AutoCloseable {
     public final static long MILLI = 1_000_000;
     public final static long SECOND = 1_000 * MILLI;
 
+    private final String desc;
     private String location = "NA";
     private final long tm;
 
     public Timing() {
+        this(null);
+    }
+
+    public Timing(String desc) {
+        this.desc = desc;
         var stack = StackWalker.getInstance().walk(s -> s.limit(2).collect(Collectors.toList()));
         if (stack.size() == 2) {
             var filename = stack.get(1).getFileName().replace(".java", "");
@@ -43,8 +49,11 @@ public class Timing implements AutoCloseable {
     @Override
     public void close() {
         var took = System.nanoTime() - tm;
-
-        log.info("{}: took {}", location, toString(took).trim());
+        if (desc != null) {
+            log.info("{} - {}: took {}", desc, location, toString(took).trim());
+        } else {
+            log.info("{}: took {}", location, toString(took).trim());
+        }
     }
 
     //

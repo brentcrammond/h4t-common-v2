@@ -1,7 +1,9 @@
 package nz.h4t.common.util.files;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -25,5 +27,16 @@ public class ListDirUtils {
             return Stream.empty();
         }
         return Arrays.stream(fs);
+    }
+
+    public static List<File> list(File dir) {
+        if (dir == null) {
+            return new ArrayList<>();
+        }
+        var fs = dir.listFiles();
+        if (fs == null) {
+            return new ArrayList<>();
+        }
+        return Arrays.stream(fs).toList();
     }
 }
