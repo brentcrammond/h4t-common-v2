@@ -6,7 +6,7 @@
 
     <groupId>com.github.brentcrammond</groupId>
     <artifactId>common-v2</artifactId>
-    <version>1.2.3</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <name>h4t-common-v2</name>
@@ -36,6 +36,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.20.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>[3.1.0, 3.2.0)</version>
             <scope>provided</scope>
         </dependency>
 

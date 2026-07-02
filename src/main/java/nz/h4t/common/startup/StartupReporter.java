@@ -90,8 +90,8 @@ public abstract class StartupReporter {
                         add("Email", "Keep Alive", "quarkus.mailer.keep-alive", Boolean.class);
                     }
                     case "Timezones" -> {
-                        addValue("Timezones", "Default Timezone", TimeZone.getDefault().getID());
-                        addValue("Timezones", "Java Timezone", System.getProperty("user.timezone"));
+                        add("Timezones", "Default Timezone", StartupSpecialProperties.Timezone);
+                        add("Timezones", "Java Timezone", StartupSpecialProperties.JavaTimezone);
                         add("Timezones", "Hibernate Timezone", "quarkus.hibernate-orm.jdbc.timezone");
                     }
                     case "Misc" -> {
@@ -149,6 +149,8 @@ public abstract class StartupReporter {
         var cwd = currentRelativePath.toAbsolutePath().toString();
         var startedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEE d-MMM-yyyy HH:mm:ss"));
 
+        var titleLen = Math.max(startupItems.stream().mapToInt(p -> p.getName().length()).max().orElse(0) + 2, 32);
+
         var config = org.eclipse.microprofile.config.ConfigProvider.getConfig().unwrap(SmallRyeConfig.class);
 
         if (applicationName == null) {
@@ -170,28 +172,28 @@ public abstract class StartupReporter {
 
             switch (itm.getSpecialProperty()) {
                 case ConfigProperty ->
-                        extractProperty(config, itm.getName(), itm.getPropertyName(), itm.getPropertyUnits(), itm.getPropertyClass(), itm.getConvert(), sb);
-                case CustomValue -> append(itm.getName(), itm.getCustomValue(), sb);
-                case CWD -> append(itm.getName(), cwd, sb);
-                case StartedAt -> append(itm.getName(), startedAt, sb);
-                case Profiles -> append(itm.getName(), profiles, sb);
-                case JavaVendor -> append(itm.getName(), javaVendor, sb);
-                case JavaVersion -> append(itm.getName(), javaVersion, sb);
-                case JavaSpecVersion -> append(itm.getName(), javaSpecVersion, sb);
-                case MaxMemory -> append(itm.getName(), humanReadableByteCount(runtime.maxMemory()), sb);
+                        extractProperty(config, itm.getName(), itm.getPropertyName(), itm.getPropertyUnits(), itm.getPropertyClass(), itm.getConvert(), titleLen, sb);
+                case CustomValue -> append(itm.getName(), itm.getCustomValue(), titleLen, sb);
+                case CWD -> append(itm.getName(), cwd, titleLen, sb);
+                case StartedAt -> append(itm.getName(), startedAt, titleLen, sb);
+                case Profiles -> append(itm.getName(), profiles, titleLen, sb);
+                case JavaVendor -> append(itm.getName(), javaVendor, titleLen, sb);
+                case JavaVersion -> append(itm.getName(), javaVersion, titleLen, sb);
+                case JavaSpecVersion -> append(itm.getName(), javaSpecVersion, titleLen, sb);
+                case MaxMemory -> append(itm.getName(), humanReadableByteCount(runtime.maxMemory()), titleLen, sb);
                 case TotalFreeMemory ->
-                        append(itm.getName(), humanReadableByteCount(runtime.freeMemory() + (runtime.maxMemory() - runtime.totalMemory())), sb);
-                case AllocatedMemory -> append(itm.getName(), humanReadableByteCount(runtime.totalMemory()), sb);
-                case FreeMemory -> append(itm.getName(), humanReadableByteCount(runtime.freeMemory()), sb);
-                case BuildVersion -> extractProperty(config, itm.getName(), "build.version", sb);
-                case BuildTimestamp -> extractProperty(config, itm.getName(), "build.timestamp", sb);
-                case GITCommitId -> extractProperty(config, itm.getName(), "git.commit.id", sb);
-                case GITCommitIdAbbrev -> extractProperty(config, itm.getName(), "git.commit.id.abbrev", sb);
-                case GITBuildTime -> extractProperty(config, itm.getName(), "git.build.time", sb);
-                case Timezone -> TimeZone.getDefault().getID();
-                case JavaTimezone -> System.getProperty("user.timezone");
-                case ORMTimezone -> extractProperty(config, itm.getName(), "quarkus.hibernate-orm.jdbc.timezone", sb);
-                case Copyright -> extractProperty(config, itm.getName(), "build.copyright", sb);
+                        append(itm.getName(), humanReadableByteCount(runtime.freeMemory() + (runtime.maxMemory() - runtime.totalMemory())), titleLen, sb);
+                case AllocatedMemory -> append(itm.getName(), humanReadableByteCount(runtime.totalMemory()), titleLen, sb);
+                case FreeMemory -> append(itm.getName(), humanReadableByteCount(runtime.freeMemory()), titleLen, sb);
+                case BuildVersion -> extractProperty(config, itm.getName(), "build.version", titleLen, sb);
+                case BuildTimestamp -> extractProperty(config, itm.getName(), "build.timestamp", titleLen, sb);
+                case GITCommitId -> extractProperty(config, itm.getName(), "git.commit.id", titleLen, sb);
+                case GITCommitIdAbbrev -> extractProperty(config, itm.getName(), "git.commit.id.abbrev", titleLen, sb);
+                case GITBuildTime -> extractProperty(config, itm.getName(), "git.build.time", titleLen, sb);
+                case Timezone -> append(itm.getName(), TimeZone.getDefault().getID(), titleLen, sb);
+                case JavaTimezone -> append(itm.getName(), System.getProperty("user.timezone"), titleLen, sb);
+                case ORMTimezone -> extractProperty(config, itm.getName(), "quarkus.hibernate-orm.jdbc.timezone", titleLen, sb);
+                case Copyright -> extractProperty(config, itm.getName(), "build.copyright", titleLen, sb);
                 case BlankLine -> append(sb);
             }
 
@@ -205,17 +207,17 @@ public abstract class StartupReporter {
         log.info("");
     }
 
-    private void extractProperty(SmallRyeConfig config, String name, String propertyName, StringBuilder sb) {
-        extractProperty(config, name, propertyName, null, String.class, null, sb);
+    private void extractProperty(SmallRyeConfig config, String name, String propertyName, int titleLen, StringBuilder sb) {
+        extractProperty(config, name, propertyName, null, String.class, null, titleLen, sb);
     }
 
-    private void extractProperty(SmallRyeConfig config, String name, String propertyName, String propertyUnits, Class propertyClass, Function<String, String> convert, StringBuilder sb) {
+    private void extractProperty(SmallRyeConfig config, String name, String propertyName, String propertyUnits, Class propertyClass, Function<String, String> convert, int titleLen, StringBuilder sb) {
         var sVal = extractProperty(config, propertyName, propertyUnits, propertyClass);
         if (sVal != null) {
             if (convert != null) {
                 sVal = convert.apply(sVal);
             }
-            append(name, sVal, sb);
+            append(name, sVal, titleLen, sb);
         }
     }
 
@@ -249,10 +251,10 @@ public abstract class StartupReporter {
     // Internal Methods...
     //
 
-    private void append(String title, String val, StringBuilder sb) {
+    private void append(String title, String val, int titleLen, StringBuilder sb) {
         sb.append("  " + title);
         sb.append(':');
-        sb.append(StringUtils.repeat('_', 32 - title.length()));
+        sb.append(StringUtils.repeat('_', titleLen - title.length()));
         sb.append(' ');
         sb.append(val);
         sb.append('\n');
