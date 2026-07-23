@@ -2,6 +2,7 @@ package nz.h4t.common.startup;
 
 import io.quarkus.runtime.configuration.ConfigUtils;
 import io.smallrye.config.SmallRyeConfig;
+import nz.h4t.common.banner.BannerUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -23,11 +24,16 @@ public abstract class StartupReporter {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger("Startup");
 
     protected String applicationName;
+    protected String bannerText;
     protected List<StartupItem> startupItems = new ArrayList<>();
 
     public void applicationName(String applicationNameProperty) {
         var config = org.eclipse.microprofile.config.ConfigProvider.getConfig().unwrap(SmallRyeConfig.class);
         applicationName = config.getOptionalValue(applicationNameProperty, String.class).orElse("Unknown");
+    }
+
+    public void addBanner(String bannerText) {
+        this.bannerText = bannerText;
     }
 
     /**
@@ -158,6 +164,11 @@ public abstract class StartupReporter {
         }
 
         var sb = new StringBuilder();
+        if (bannerText != null) {
+            append(BannerUtils.bannerify(bannerText), sb);
+            append(sb);
+        }
+
         append(applicationName, sb);
         append(StringUtils.repeat('-', applicationName.length()), sb);
 
@@ -200,10 +211,11 @@ public abstract class StartupReporter {
             lastSection = itm.getSection();
         }
 
+        var len = Arrays.stream(sb.toString().split("\\r?\\n")).mapToInt(String::length).max().getAsInt();
         log.info("");
-        log.info(StringUtils.repeat('=', 100));
+        log.info(StringUtils.repeat('=', len));
         Arrays.stream(sb.toString().split("\\r?\\n")).forEach(log::info);
-        log.info(StringUtils.repeat('=', 100));
+        log.info(StringUtils.repeat('=', len));
         log.info("");
     }
 
