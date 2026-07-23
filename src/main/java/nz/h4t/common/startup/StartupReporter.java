@@ -172,7 +172,7 @@ public abstract class StartupReporter {
 
         var sb = new StringBuilder();
         if (bannerText != null) {
-            append(BannerUtils.bannerify(bannerText), sb);
+            append(BannerUtils.bannerify(bannerText, bannerFont), sb);
             append(sb);
         }
 
