@@ -3,6 +3,7 @@ package nz.h4t.common.startup;
 import io.quarkus.runtime.configuration.ConfigUtils;
 import io.smallrye.config.SmallRyeConfig;
 import nz.h4t.common.banner.BannerUtils;
+import nz.h4t.common.banner.Font;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -25,6 +26,7 @@ public abstract class StartupReporter {
 
     protected String applicationName;
     protected String bannerText;
+    protected Font bannerFont = null;
     protected List<StartupItem> startupItems = new ArrayList<>();
 
     public void applicationName(String applicationNameProperty) {
@@ -34,6 +36,11 @@ public abstract class StartupReporter {
 
     public void addBanner(String bannerText) {
         this.bannerText = bannerText;
+    }
+
+    public void addBanner(String bannerText, Font bannerFont) {
+        this.bannerText = bannerText;
+        this.bannerFont = bannerFont;
     }
 
     /**
