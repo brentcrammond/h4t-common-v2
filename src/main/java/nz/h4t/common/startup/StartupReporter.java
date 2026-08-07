@@ -179,17 +179,28 @@ public abstract class StartupReporter {
                     .orElse(0);
             append(banner, sb);
             append(sb);
+
             var developedBy = extractProperty(config, "developed.by", null, String.class);
             if (developedBy != null) {
                 var developedByText = "Developed by: " + developedBy;
-                append(StringUtils.repeat(' ', Math.max(0, bannerLength - developedByText.length())) + developedByText, sb);
+                var developedByPrefix = StringUtils.repeat(' ', Math.max(0, bannerLength - developedByText.length()));
+                if (applicationName.length() + developedByText.length() + 5 < bannerLength) {
+                    append(applicationName + StringUtils.repeat(' ', bannerLength - applicationName.length() - developedByText.length()) + developedByText, sb);
+                } else {
+                    append(developedByPrefix + developedByText, sb);
+                    append(applicationName, sb);
+                }
                 append(sb);
+            } else {
+                append(applicationName, sb);
             }
-        }
 
-        append(applicationName, sb);
-        append(StringUtils.repeat('-', applicationName.length()), sb);
-        append(sb);
+            append(StringUtils.repeat('-', bannerLength), sb);
+        } else {
+            append(applicationName, sb);
+            append(StringUtils.repeat('-', applicationName.length()), sb);
+            append(sb);
+        }
 
         String lastSection = null;
         for (var itm : startupItems) {
