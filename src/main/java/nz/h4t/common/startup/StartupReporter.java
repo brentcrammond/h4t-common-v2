@@ -190,7 +190,6 @@ public abstract class StartupReporter {
                     append(developedByPrefix + developedByText, sb);
                     append(applicationName, sb);
                 }
-                append(sb);
             } else {
                 append(applicationName, sb);
             }
