@@ -172,12 +172,24 @@ public abstract class StartupReporter {
 
         var sb = new StringBuilder();
         if (bannerText != null) {
-            append(BannerUtils.bannerify(bannerText, bannerFont), sb);
+            var banner = BannerUtils.bannerify(bannerText, bannerFont);
+            var bannerLength = Arrays.stream(banner.split("\\r?\\n"))
+                    .mapToInt(String::length)
+                    .max()
+                    .orElse(0);
+            append(banner, sb);
             append(sb);
+            var developedBy = extractProperty(config, "developed.by", null, String.class);
+            if (developedBy != null) {
+                var developedByText = "Developed by: " + developedBy;
+                append(StringUtils.repeat(' ', Math.max(0, bannerLength - developedByText.length())) + developedByText, sb);
+                append(sb);
+            }
         }
 
         append(applicationName, sb);
         append(StringUtils.repeat('-', applicationName.length()), sb);
+        append(sb);
 
         String lastSection = null;
         for (var itm : startupItems) {
